@@ -1,0 +1,51 @@
+{
+  "name": "tutor-client",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "webpack --config webpack.prod.js --mode production",
+    "webpack": "webpack --config webpack.dev.js --mode development"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.51",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/eventemitter3": "^2.0.2",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.30",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router": "^5.1.4",
+    "@types/react-router-dom": "^5.1.3",
+    "awesome-typescript-loader": "^5.2.1",
+    "axios": "^0.21.1",
+    "bootstrap-4-grid": "^2.4.1",
+    "eventemitter3": "^3.1.0",
+    "fabric": "^2.7.0",
+    "mithril": "^1.1.7",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-redux": "^7.2.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "redux": "^4.0.5",
+    "typescript": "4.0.2"
+  },
+  "devDependencies": {
+    "@types/eventemitter3": "^2.0.2",
+    "@types/fabric": "^1.5.54",
+    "@types/mithril": "^1.1.17",
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^0.28.11",
+    "mini-css-extract-plugin": "^0.4.5",
+    "style-loader": "^0.20.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-merge": "^4.2.2"
+  }
+}
