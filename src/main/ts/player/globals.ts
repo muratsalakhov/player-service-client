@@ -27,7 +27,7 @@ export const statistics: {
         timeStart: number,
         timeFinish: number,
         mistakes: number
-    },
+    }/*,
     chapters: {
         [key: string]: {
             id: string,
@@ -35,12 +35,12 @@ export const statistics: {
             timeFinish: number,
             mistakes: number
         }
-    }
+    }*/
 }= {
     script:{
         timeStart: 0,
         timeFinish: 0,
         mistakes: 0
-    },
-    chapters: {}
+    }/*,
+    chapters: {}*/
 };
