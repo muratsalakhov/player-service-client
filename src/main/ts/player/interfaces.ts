@@ -31,9 +31,9 @@ export interface IScripts {
     [key: string]: IScript
 }
 
-export interface IChapters {
+/*export interface IChapters {
     [key: string]: IChapter
-}
+}*/
 
 export interface IFrames {
     [key: string]: IFrame
@@ -42,17 +42,28 @@ export interface IFrames {
 export interface IScript {
     uid: string
     name: string
-    isActive: boolean
     dragDelta: number
     dragTimeFactor: number
     scrollMoveFactor: number
     firstFrame: string
     pictureWidth: number
     pictureHeight: number
-    frames: Array<string>
+    frames: Array<IFrame>
 }
 
-export interface IChapter {
+export interface IScriptWithFullFrames {
+    uid: string
+    name: string
+    dragDelta: number
+    dragTimeFactor: number
+    scrollMoveFactor: number
+    firstFrame: string
+    pictureWidth: number
+    pictureHeight: number
+    frames: Array<IFrame>
+}
+
+/*export interface IChapter {
     id: string
     name: string
     scriptId: string
@@ -72,9 +83,19 @@ export interface IChapterWithFullFrames {
     pictureHeight: number
     chapterNumber: number
     frames: Array<IFrame>
-}
+}*/
 
 export interface IFrame {
+    uid: string
+    pictureLink: string
+    pictureData?:HTMLImageElement
+    underlying: boolean
+    taskText: string
+    hintText: string
+    actions: Array<ISwitchData>
+}
+
+/*export interface IFrame {
     uid: string
     pictureLink: string
     pictureData?:HTMLImageElement
@@ -84,8 +105,9 @@ export interface IFrame {
     taskVoice?: ITaskVoice
     hintVoice?: any
     actions: Array<ISwitchData>
-}
+}*/
 
+/*
 export interface ITaskText {
     id: string
     text: string
@@ -100,7 +122,7 @@ export interface ITaskVoice {
     id: string
     link: string
 }
-
+*/
 export type IEvent<K, V = void> = V extends void ? { actionId: K } : { actionId: K } & V
 
 // export type IDragEvent = IEvent<'Drag', {xstartLeft: number, ystartLeft: number, xstartRight: number, ystartRight: number,
@@ -157,7 +179,7 @@ export type IEvent<K, V = void> = V extends void ? { actionId: K } : { actionId:
 
 export interface ISwitchEvent {
     uid: string
-    actionType: number
+    actionType: string
     nextFrame: string
     duration: number
     key: number
@@ -198,17 +220,17 @@ export type IEventForCheck =
 
 export interface ISwitchData {
     uid: string
-    actionType: number
+    actionType: string
     nextFrameId: string | null
     duration: number
     key: number
     modKey?:number
     pictures: Array<ISwitchPicture>
     ticksCount: number
-    xendLeft: number
-    xendRight: number
     xLeft: number
     xRight: number
+    yLeft: number
+    yRight: number
     startXLeft: number
     startYLeft: number
     startXRight: number
@@ -221,10 +243,10 @@ export interface ISwitchData {
 
 export interface ISwitchPicture {
     pictureLink: string
-    //pictureData?:HTMLImageElement
-    //pictureNumber: number
-    //x: number
-    //y: number
+    pictureData?:HTMLImageElement
+    pictureNumber: number
+    x: number
+    y: number
 }
 
 export interface ISquareCoords {
