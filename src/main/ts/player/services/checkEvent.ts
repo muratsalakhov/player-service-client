@@ -13,14 +13,14 @@ export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string 
         return null;
 
     const suitableSwitchData = switchData.find(data => {
-        if (data.switchEvent.actionId !== e.actionId)
+        if (data.actionType !== e.actionId)
             return false;
 
         const coords:ISquareCoords = {
-            xleft: data.switchEvent.xleft,
-            xright: data.switchEvent.xright,
-            yleft: data.switchEvent.yleft,
-            yright: data.switchEvent.yright
+            xleft: data.xLeft,
+            xright: data.xRight,
+            yleft: data.yLeft,
+            yright: data.yRight
         };
 
         return e.x >= coords.xleft && e.x <= coords.xright && e.y >= coords.yleft && e.y <= coords.yright;
@@ -40,9 +40,9 @@ export const chDrag = (e:IEventForCheck, switchData:Array<ISwitchData>):{
 
     let checkDragResult = null;
     const suitableSwitchData = switchData.find(data => {
-        if (data.switchEvent.actionId !== 'Drag')
+        if (data.actionType !== 'Drag')
             return false;
-        const checkTrajectoryResult = checkDragTrajectory(e, data.switchEvent);
+        const checkTrajectoryResult = checkDragTrajectory(e, data);
         if (!checkTrajectoryResult || !checkTrajectoryResult.tunnelCheckResult)
             return false;
 
@@ -59,21 +59,21 @@ export const chDrag = (e:IEventForCheck, switchData:Array<ISwitchData>):{
     };
 };
 
-export const checkDragTrajectory = (e: IEventForCheck, dragEvent:ISwitchEvent):ICheckDragResult | null => {
+export const checkDragTrajectory = (e: IEventForCheck, dragEvent:ISwitchData):ICheckDragResult | null => {
     if (e.actionId !== 'Drag')
         return null;
 
     const start = {
-            xleft: dragEvent.xstartLeft,
-            yleft: dragEvent.ystartLeft,
-            xright: dragEvent.xstartRight,
-            yright: dragEvent.ystartRight
+            xleft: dragEvent.startXLeft,
+            yleft: dragEvent.startYLeft,
+            xright: dragEvent.startXRight,
+            yright: dragEvent.startYRight
         },
         finish = {
-            xleft: dragEvent.xendLeft,
-            yleft: dragEvent.yendLeft,
-            xright: dragEvent.xendRight,
-            yright: dragEvent.yendRight
+            xleft: dragEvent.finishXLeft,
+            yleft: dragEvent.finishYLeft,
+            xright: dragEvent.finishXRight,
+            yright: dragEvent.finishYRight
         },
         pictures = dragEvent.pictures;
 
@@ -201,9 +201,9 @@ export const checkDuration = (switchData:Array<ISwitchData>):{
     let nextFrameId:string | null = null;
 
     switchData.forEach(data => {
-        if (data.switchEvent.actionId !== 'Pause')
+        if (data.actionType !== 'Pause')
             return;
-        duration = data.switchEvent.duration;
+        duration = data.duration;
         nextFrameId = data.nextFrameId;
     });
 
