@@ -15,10 +15,10 @@ type ClassicProps = {};
 
 const mapState = (state:IState) => {return {
     scripts: state.scriptsReducer.scripts,
-    chapters: state.scriptsReducer.chapters,
+    //chapters: state.scriptsReducer.chapters,
     frames: state.scriptsReducer.frames,
     selectedScript: state.scriptsReducer.selectedScriptId,
-    selectedChapter: state.scriptsReducer.selectedChapterId,
+    //selectedChapter: state.scriptsReducer.selectedChapterId,
     selectedFrame: state.scriptsReducer.selectedFrameId,
     sidebarAutoHiding: state.settingsReducer.sidebarAutoHiding,
     examMode: state.settingsReducer.examMode,
@@ -39,16 +39,16 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ClassicProps;
 
-const SettingsPage = ({ scripts, chapters, frames, sidebarAutoHiding, setSidebarAutoHiding,
-    selectedScript, selectedChapter, selectedFrame, examMode, setExamMode, voiceTaskEnable, setVoiceTaskEnable,
+const SettingsPage = ({ scripts, /*chapters,*/ frames, sidebarAutoHiding, setSidebarAutoHiding,
+    selectedScript, /*selectedChapter,*/ selectedFrame, examMode, setExamMode, voiceTaskEnable, setVoiceTaskEnable,
     voiceHintEnable, setVoiceHintEnable, setVoiceVolume, voiceVolume}:Props) => {
     let history = useHistory();
 
     if (!selectedScript ||
-        !selectedChapter ||
+        //!selectedChapter ||
         !selectedFrame ||
         !scripts[selectedScript] ||
-        !chapters[selectedChapter] ||
+        //!chapters[selectedChapter] ||
         !frames[selectedFrame]) {
         history.push('/');
         return <></>;
