@@ -12,21 +12,21 @@ export const showHint = (
 ) => {
     if (!switchData.length)
         return;
-    switch (switchData[0].switchEvent.actionId) {
+    switch (switchData[0].actionType) {
         case 'LeftMouseClick':
         case 'LeftDoubleMouseClick':
         case 'RightMouseClick':
         case 'ScrollUp':
         case 'ScrollDown':
             showHintRect({
-                xleft: switchData[0].switchEvent.xleft,
-                yleft: switchData[0].switchEvent.yleft,
-                xright: switchData[0].switchEvent.xright,
-                yright: switchData[0].switchEvent.yright,
+                xleft: switchData[0].xLeft,
+                yleft: switchData[0].yLeft,
+                xright: switchData[0].xRight,
+                yright: switchData[0].yRight,
             }, canvas, canvasZoom, setHintPicture);
             break;
         case 'Drag':
-            showHintPathCanvas(canvas, canvasZoom, switchData[0].switchEvent, dragDelta, setHintPicture);
+            showHintPathCanvas(canvas, canvasZoom, switchData[0], dragDelta, setHintPicture);
             break;
     }
 };
@@ -80,7 +80,7 @@ export const showHintRect = (
 export const showHintPathCanvas = (
     imageCanvas:HTMLCanvasElement,
     canvasZoom:number,
-    dragEvent:ISwitchEvent,
+    dragEvent:ISwitchData,
     dragDelta:number,
     setHintPicture:(imageData:HTMLImageElement | null) => void
 ) => {
@@ -97,8 +97,8 @@ export const showHintPathCanvas = (
     context.fillStyle = fillStyle;
 
     xyCenterArea.push({
-        x: (dragEvent.xstartRight - dragEvent.xstartLeft) / 2 + dragEvent.xstartLeft + 1,
-        y: (dragEvent.ystartRight - dragEvent.ystartLeft) / 2 + dragEvent.ystartLeft + 1
+        x: (dragEvent.startXRight - dragEvent.startXLeft) / 2 + dragEvent.startXLeft + 1,
+        y: (dragEvent.startYRight - dragEvent.startYLeft) / 2 + dragEvent.startYLeft + 1
     });
     for (i = 0; i < dragEvent.pictures.length; i++) {
         const switchPicture = dragEvent.pictures[i];
@@ -108,16 +108,16 @@ export const showHintPathCanvas = (
         });
     }
     xyCenterArea.push({
-        x: (dragEvent.xendRight - dragEvent.xendLeft) / 2 + dragEvent.xendLeft + 1,
-        y: (dragEvent.yendRight - dragEvent.yendLeft) / 2 + dragEvent.yendLeft + 1
+        x: (dragEvent.finishXRight - dragEvent.finishXLeft) / 2 + dragEvent.finishXLeft + 1,
+        y: (dragEvent.finishYRight - dragEvent.finishYLeft) / 2 + dragEvent.finishYLeft + 1
     });
 
-    context.fillRect(dragEvent.xstartLeft / canvasZoom, dragEvent.ystartLeft / canvasZoom,
-        dragEvent.xstartRight / canvasZoom - dragEvent.xstartLeft / canvasZoom + 1,
-        dragEvent.ystartRight / canvasZoom - dragEvent.ystartLeft / canvasZoom + 1);
-    context.fillRect(dragEvent.xendLeft / canvasZoom, dragEvent.yendLeft / canvasZoom,
-        dragEvent.xendRight / canvasZoom - dragEvent.xendLeft / canvasZoom + 1,
-        dragEvent.yendRight / canvasZoom - dragEvent.yendLeft / canvasZoom + 1);
+    context.fillRect(dragEvent.startXLeft / canvasZoom, dragEvent.startYLeft / canvasZoom,
+        dragEvent.startXRight / canvasZoom - dragEvent.startXLeft / canvasZoom + 1,
+        dragEvent.startYRight / canvasZoom - dragEvent.startYLeft / canvasZoom + 1);
+    context.fillRect(dragEvent.finishXLeft / canvasZoom, dragEvent.finishYLeft / canvasZoom,
+        dragEvent.finishXRight / canvasZoom - dragEvent.finishXLeft / canvasZoom + 1,
+        dragEvent.finishYRight / canvasZoom - dragEvent.finishYLeft / canvasZoom + 1);
 
     const xyCenterAreaLength = xyCenterArea.length;
     for(i = 0; i < xyCenterAreaLength - 1; i++) {
