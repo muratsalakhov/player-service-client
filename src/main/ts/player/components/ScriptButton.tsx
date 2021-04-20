@@ -69,10 +69,11 @@ const ScriptButton = ({ scriptId, index, scripts, /*chapters,*/ frames,
     };
 
     const goToSettings = useCallback(() => {
-        if (selectedScript && selectedFrame
-            && Object.keys(scripts).length && Object.keys(frames)
-            && scripts[selectedScript].frames)
+        if (selectedScript && selectedFrame){
+            //&& Object.keys(scripts).length && Object.keys(frames)
+            //&& scripts[selectedScript].frames) {
             history.push("/settings");
+        }
     }, [selectedScript, /*selectedChapter,*/ selectedFrame, scripts, /*chapters,*/ frames, history]);
 
     useEffect(goToSettings, [selectedScript, /*selectedChapter,*/ selectedFrame, scripts, /*chapters,*/ frames]);
