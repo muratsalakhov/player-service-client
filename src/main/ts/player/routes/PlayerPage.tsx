@@ -64,6 +64,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
     const [loading, setLoading] = useState(false);
 
     const framesWait = useCallback(() => {
+        console.log("framesWait");
         if (!frames[selectedFrameId!])
             return;
         if (!frames[selectedFrameId!].pictureData)
@@ -74,6 +75,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
     useEffect(framesWait, [frames[selectedFrameId!]]);
 
     const bufferUpdate = useCallback(() => {
+        console.log("bufferUpdate");
         if (!selectedFrameId || !selectedFrame)
             return;
         statistics.script = {
@@ -85,20 +87,25 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
         // buffering images
         // setLoading(true);
         const bufferingNextFrames = (frame:IFrame, previousImage:HTMLImageElement | undefined) => {
+            console.log("bufferingNextFrames");
             const nextFrameIds = frame.actions.map(sw => sw.nextFrameId);
             nextFrameIds.forEach(nextFrameId => {
+                console.log("bufferingNextFrames-foreach");
                 if (nextFrameId && frames[nextFrameId] && !frames[nextFrameId].pictureData)
                     bufferingFrame(frames[nextFrameId], previousImage);
             });
         };
 
         const bufferingFrame = (frame:IFrame, previousImage:HTMLImageElement | undefined) => {
+
+            console.log("bufferingFrame");
             new Promise<void>(resolve => {
                 if (frame.pictureData)
                     return resolve();
 
                 getImageData(frame.pictureLink, previousImage)
                     .then(imageData => {
+                        console.log("getImageData");
                         setPictureData(frame.uid, imageData);
 
                         let switchDataPromises: Array<Promise<void>> = [];
@@ -137,6 +144,8 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
     useEffect(bufferUpdate, [selectedScript]);
 
     const clearStatistic = useCallback(() => {
+        console.log("clearStatistic");
+
         if (!selectedScript)
             return;
         // Если загружен первый раздел сценария
@@ -146,11 +155,17 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
     useEffect(clearStatistic, [selectedScript]);
 
     const framePrepare = useCallback(() => {
+
+        console.log("framePrepare");
         const keyUpHandler = (key:number, modKey:number | null) => {
+
+            console.log("keyUpHandler");
             if (!selectedFrame || !selectedScript)
                 return;
 
             const suitableSwitchData = selectedFrame.actions.find(data => {
+                console.log("suitableSwitchData");
+                console.log(data);
                 if (data.actionType === 'KeyboardClick')
                     return key === data.key && !modKey;
                 if (data.actionType === 'KeyboardModClick')
