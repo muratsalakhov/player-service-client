@@ -180,7 +180,7 @@ export type IEvent<K, V = void> = V extends void ? { actionId: K } : { actionId:
 export interface ISwitchEvent {
     uid: string
     actionType: string
-    nextFrame: string
+    nextFrameId: string
     duration: number
     key: number
     modKey?:number
