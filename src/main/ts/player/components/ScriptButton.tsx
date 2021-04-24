@@ -52,7 +52,7 @@ const ScriptButton = ({ scriptId, index, scripts, /*chapters,*/ frames,
 
     const clickHandler = () => {
         selectScript(scriptId);
-        //statistics.chapters = {};
+        //statistics.frames = {};
         getScript(scriptId)
             .then((response:IScriptWithFullFrames) => {
                 if (response.frames.length === 0)
@@ -65,7 +65,10 @@ const ScriptButton = ({ scriptId, index, scripts, /*chapters,*/ frames,
                 setFrames(frames);
                 selectFrame(response.frames[0].uid);
             })
-            .catch(() => setScriptError('Не удалось загрузить информацию о разделе'));
+            .catch((e) => {
+                console.log(e);
+                setScriptError('Не удалось загрузить информацию о разделе');
+            });
     };
 
     const goToSettings = useCallback(() => {

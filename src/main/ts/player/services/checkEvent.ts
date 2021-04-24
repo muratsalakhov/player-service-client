@@ -6,7 +6,7 @@ import {
     ISwitchData
 } from "../interfaces";
 
-export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string | null => {
+export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string | null | undefined => {
     if (e.actionId !== 'LeftMouseClick' &&
         e.actionId !== 'LeftDoubleMouseClick' &&
         e.actionId !== 'RightMouseClick')
@@ -26,8 +26,12 @@ export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string 
         return e.x >= coords.xleft && e.x <= coords.xright && e.y >= coords.yleft && e.y <= coords.yright;
     });
 
-    if (suitableSwitchData)
+    if (suitableSwitchData) {
+        if (suitableSwitchData.nextFrameId === null) {
+            return 'none';
+        }
         return suitableSwitchData.nextFrameId;
+    }
     return null;
 };
 

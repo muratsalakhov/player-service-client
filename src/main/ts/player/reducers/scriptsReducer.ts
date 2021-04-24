@@ -1,5 +1,5 @@
 import { initialState } from '../initialState';
-import {IScriptsReducer, IScripts, IFrames} from '../interfaces';
+import {IScriptsReducer, IScripts, IFrames, IScript} from '../interfaces';
 import {statistics} from "../globals";
 
 type Action<K, V = void> = V extends void ? { type: K } : { type: K } & V
@@ -38,6 +38,10 @@ export default (
             return {...state, selectedScriptId: action.id, mistakeCounter: 0};
 
         case 'SELECT_FRAME':
+            /*if (action.frameId) {
+                statistics.frames[action.frameId].mistakes = 0;
+                statistics.frames[action.frameId].timeStart = new Date().getTime();
+            }*/
             return {...state, selectedFrameId: action.frameId, mistakeCounter: 0};
 
         case 'SET_PICTURE_DATA':
@@ -96,6 +100,9 @@ export default (
             if (state.selectedScriptId) {
                 statistics.script.mistakes++;
             }
+            /*if (state.selectedFrameId) {
+                statistics.frames[state.selectedFrameId].mistakes++;
+            }*/
             return {...state, mistakeCounter: action.count !== undefined ? action.count : state.mistakeCounter + 1};
 
         default:

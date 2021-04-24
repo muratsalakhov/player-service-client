@@ -10,6 +10,7 @@ import {Button} from "@material-ui/core";
 const mapState = (state:IState) => {
     return {
         scripts: state.scriptsReducer.scripts,
+        selectedScriptId: state.scriptsReducer.selectedScriptId
         //chapters: state.scriptsReducer.chapters
     }
 };
@@ -31,10 +32,11 @@ const ResultPage = (props:Props) => {
             <h1>Результаты прохождения обучающей программы:</h1>
             <br/><br/>
             <div style={{textAlign: 'left'}}>
-                {Object.keys(statistics.script).map(scriptId => {
+                {Object.keys(statistics).map(scriptId => {
+                    //console.log("STATS",statistics);
                     const time = statistics.script.timeFinish - statistics.script.timeStart;
                     return <div style={{marginBottom: '1em'}}>
-                        <span style={{textDecoration: 'underline'}}>Раздел "{props.scripts[scriptId].name}":</span>
+                        <span style={{textDecoration: 'underline'}}>Сценарий "{props.scripts[props.selectedScriptId].name}":</span>
                         <div style={{paddingLeft: '1em'}}>
                             Время: <b>{timeConversion(time)}</b>
                         </div>

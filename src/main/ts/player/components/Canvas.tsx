@@ -141,10 +141,13 @@ const Canvas = ({
 
             // Проверим, есть ли именно такой двойной клик среди верных действий
             const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
-            const nextFrameId:string | null = chClick(
+            const nextFrameId:string | null | undefined = chClick(
                 {actionId: 'LeftDoubleMouseClick', x, y},
                 selectedFrame.actions
             );
+
+            if (nextFrameId === 'none')
+                return nextFrame(null);
 
             // Если нет, клик не верный
             if (!nextFrameId)
@@ -159,10 +162,12 @@ const Canvas = ({
 
         // Проверим, есть ли именно такой клик среди верных действий
         const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
-        let nextFrameId:string | null = chClick(
+        let nextFrameId:string | null | undefined= chClick(
             {actionId: 'LeftMouseClick', x, y},
             selectedFrame.actions
         );
+        if (nextFrameId === 'none')
+            return nextFrame(null);
 
         // Если есть, следующий кадр
         if (nextFrameId)

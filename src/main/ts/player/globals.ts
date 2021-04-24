@@ -28,7 +28,7 @@ export const statistics: {
         timeFinish: number,
         mistakes: number
     }/*,
-    chapters: {
+    frames: {
         [key: string]: {
             id: string,
             timeStart: number,
@@ -41,6 +41,6 @@ export const statistics: {
         timeStart: 0,
         timeFinish: 0,
         mistakes: 0
-    }/*,
-    chapters: {}*/
+    }//,
+    //frames: {}
 };
