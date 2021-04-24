@@ -36,6 +36,13 @@ export default (
             return {...state, frames: action.frames};
 
         case 'SELECT_SCRIPT':
+            statistics.script = {
+                timeStart: 0,
+                timeFinish: 0,
+                totalTime: 0,
+                mistakes: 0
+            }
+            statistics.frames = {}
             return {...state, selectedScriptId: action.id, mistakeCounter: 0};
 
         case 'SELECT_FRAME':
