@@ -155,8 +155,17 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
     useEffect(clearStatistic, [selectedScript]);
 
     const framePrepare = useCallback(() => {
-        console.log("frame statistic start");
-        console.log("framePrepare");
+        //console.log("frame statistic start");
+        //console.log("framePrepare");
+
+        /*statistics.frames = {
+            ...statistics.frames,
+            [selectedFrameId]: {
+                ...statistics.frames[selectedFrameId],
+                mistakes: 0,
+                timeStart: new Date().getTime()
+            }
+        };*/
         const keyUpHandler = (key:number, modKey:number | null) => {
 
             console.log("keyUpHandler");
@@ -200,13 +209,6 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
         }
 
         console.log("frame statistic finsih");
-        /*statistics.frames = {
-            ...statistics.frames,
-            [selectedFrameId]: {
-                ...statistics.frames[selectedFrameId],
-                timeFinish: new Date().getTime()
-            }
-        };*/
 
         return () => {
             keyboardListenerSwitchOff();
@@ -218,7 +220,11 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
 
     console.log("SELECTED SCRIPT", selectedFrame);
     if (!selectedFrame) {
-        statistics.script = {...statistics.script, timeFinish: new Date().getTime()};
+        statistics.script = {
+            ...statistics.script,
+            timeFinish: new Date().getTime(),
+            totalTime: statistics.script.timeFinish - statistics.script.timeStart
+        };
         history.push('/result');
         return null;
     }

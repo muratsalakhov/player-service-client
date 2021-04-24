@@ -1,6 +1,7 @@
 import { initialState } from '../initialState';
 import {IScriptsReducer, IScripts, IFrames, IScript} from '../interfaces';
 import {statistics} from "../globals";
+import timeConversion from "../utils/timeConversion";
 
 type Action<K, V = void> = V extends void ? { type: K } : { type: K } & V
 
@@ -38,10 +39,16 @@ export default (
             return {...state, selectedScriptId: action.id, mistakeCounter: 0};
 
         case 'SELECT_FRAME':
-            /*if (action.frameId) {
-                statistics.frames[action.frameId].mistakes = 0;
-                statistics.frames[action.frameId].timeStart = new Date().getTime();
-            }*/
+            console.log("current frame:", action.frameId);
+            if (action.frameId)
+                statistics.frames = {
+                    ...statistics.frames,
+                    [action.frameId]: {
+                        ...statistics.frames[action.frameId],
+                        mistakes: 0,
+                        timeStart: new Date().getTime()
+                    }
+                };
             return {...state, selectedFrameId: action.frameId, mistakeCounter: 0};
 
         case 'SET_PICTURE_DATA':
@@ -91,18 +98,43 @@ export default (
             return {...state, hintPicture: action.pictureData};
 
         case 'NEXT_FRAME':
+            console.log("STATISTIC",statistics);
+            if (state.selectedFrameId)
+                statistics.frames = {
+                    ...statistics.frames,
+                    [state.selectedFrameId]: {
+                        ...statistics.frames[state.selectedFrameId],
+                        timeFinish: new Date().getTime()
+                    }
+                };
+            if (action.nextFrameId)
+                statistics.frames = {
+                    ...statistics.frames,
+                    [action.nextFrameId]: {
+                        ...statistics.frames[action.nextFrameId],
+                        mistakes: 0,
+                        timeStart: new Date().getTime()
+                    }
+                };
+
             return {...state, selectedFrameId: action.nextFrameId, mistakeCounter: 0, hintPicture: null};
 
         case 'SET_ZOOM':
             return {...state, canvasZoom: action.zoom};
 
         case 'MISTAKE_COUNT':
+            if (state.selectedFrameId)
+                statistics.frames = {
+                    ...statistics.frames,
+                    [state.selectedFrameId]: {
+                        ...statistics.frames[state.selectedFrameId],
+                        mistakes: statistics.frames[state.selectedFrameId].mistakes + 1
+                    }
+                };
+
             if (state.selectedScriptId) {
                 statistics.script.mistakes++;
             }
-            /*if (state.selectedFrameId) {
-                statistics.frames[state.selectedFrameId].mistakes++;
-            }*/
             return {...state, mistakeCounter: action.count !== undefined ? action.count : state.mistakeCounter + 1};
 
         default:
