@@ -7,9 +7,9 @@ import {
 } from "../interfaces";
 
 export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string | null | undefined => {
-    if (e.actionId !== 'LeftMouseClick' &&
-        e.actionId !== 'LeftDoubleMouseClick' &&
-        e.actionId !== 'RightMouseClick')
+    if (e.actionId !== 1 &&
+        e.actionId !== 4 &&
+        e.actionId !== 5)
         return null;
 
     const suitableSwitchData = switchData.find(data => {
@@ -27,10 +27,10 @@ export const chClick = (e:IEventForCheck, switchData:Array<ISwitchData>):string 
     });
 
     if (suitableSwitchData) {
-        if (suitableSwitchData.nextFrameId === null) {
-            return 'none';
+        if (suitableSwitchData.nextFrame.uid === null) {
+            return undefined;
         }
-        return suitableSwitchData.nextFrameId;
+        return suitableSwitchData.nextFrame.uid;
     }
     return null;
 };
@@ -39,12 +39,12 @@ export const chDrag = (e:IEventForCheck, switchData:Array<ISwitchData>):{
     checkDragResult: ICheckDragResult | null,
     switchData: ISwitchData | undefined
 } | null => {
-    if (e.actionId !== 'Drag')
+    if (e.actionId !== 13)
         return null;
 
     let checkDragResult = null;
     const suitableSwitchData = switchData.find(data => {
-        if (data.actionType !== 'Drag')
+        if (data.actionType !== 13)
             return false;
         const checkTrajectoryResult = checkDragTrajectory(e, data);
         if (!checkTrajectoryResult || !checkTrajectoryResult.tunnelCheckResult)
@@ -64,7 +64,7 @@ export const chDrag = (e:IEventForCheck, switchData:Array<ISwitchData>):{
 };
 
 export const checkDragTrajectory = (e: IEventForCheck, dragEvent:ISwitchData):ICheckDragResult | null => {
-    if (e.actionId !== 'Drag')
+    if (e.actionId !== 13)
         return null;
 
     const start = {
@@ -205,10 +205,10 @@ export const checkDuration = (switchData:Array<ISwitchData>):{
     let nextFrameId:string | null = null;
 
     switchData.forEach(data => {
-        if (data.actionType !== 'Pause')
+        if (data.actionType !== 17)
             return;
         duration = data.duration;
-        nextFrameId = data.nextFrameId;
+        nextFrameId = data.nextFrame.uid;
     });
 
     return {

@@ -13,11 +13,11 @@ export const showHint = (
     if (!switchData.length)
         return;
     switch (switchData[0].actionType) {
-        case 'LeftMouseClick':
-        case 'LeftDoubleMouseClick':
-        case 'RightMouseClick':
-        case 'ScrollUp':
-        case 'ScrollDown':
+        case 1:
+        case 4:
+        case 5:
+        case 14:
+        case 15:
             showHintRect({
                 xleft: switchData[0].xLeft,
                 yleft: switchData[0].yLeft,
@@ -25,7 +25,7 @@ export const showHint = (
                 yright: switchData[0].yRight,
             }, canvas, canvasZoom, setHintPicture);
             break;
-        case 'Drag':
+        case 13:
             showHintPathCanvas(canvas, canvasZoom, switchData[0], dragDelta, setHintPicture);
             break;
     }

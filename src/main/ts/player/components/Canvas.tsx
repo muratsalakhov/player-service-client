@@ -142,11 +142,11 @@ const Canvas = ({
             // Проверим, есть ли именно такой двойной клик среди верных действий
             const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
             const nextFrameId:string | null | undefined = chClick(
-                {actionId: 'LeftDoubleMouseClick', x, y},
+                {actionId: 4, x, y},
                 selectedFrame.actions
             );
 
-            if (nextFrameId === 'none')
+            if (nextFrameId === undefined)
                 return nextFrame(null);
 
             // Если нет, клик не верный
@@ -163,10 +163,10 @@ const Canvas = ({
         // Проверим, есть ли именно такой клик среди верных действий
         const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
         let nextFrameId:string | null | undefined= chClick(
-            {actionId: 'LeftMouseClick', x, y},
+            {actionId: 1, x, y},
             selectedFrame.actions
         );
-        if (nextFrameId === 'none')
+        if (nextFrameId === undefined)
             return nextFrame(null);
 
         // Если есть, следующий кадр
@@ -175,7 +175,7 @@ const Canvas = ({
 
         // Если нет, проверим, есть ли именно такой двойной клик среди верных действий
         nextFrameId = chClick(
-            {actionId: 'LeftDoubleMouseClick', x, y},
+            {actionId: 4, x, y},
             selectedFrame.actions
         );
 
@@ -206,7 +206,7 @@ const Canvas = ({
         // Проверим, есть ли именно такой правый клик среди верных действий
         const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
         const nextFrameId:string | null = chClick(
-            {actionId: 'RightMouseClick', x, y},
+            {actionId: 5, x, y},
             selectedFrame.actions
         );
 
@@ -250,7 +250,7 @@ const Canvas = ({
 
         if (mouse.clickNotMove) {
             const nextFrameId = chClick(
-                {actionId: 'LeftMouseClick', x, y},
+                {actionId: 1, x, y},
                 selectedFrame.actions
             );
 
@@ -262,7 +262,7 @@ const Canvas = ({
 
         const check = chDrag(
             {
-                actionId: 'Drag',
+                actionId: 13,
                 x, y,
                 isStarted: false,
                 isFinished: true,
@@ -290,7 +290,7 @@ const Canvas = ({
         }
 
         if (mouse.wasDragInStartArea)
-            nextFrame(check.switchData ? check.switchData.nextFrameId : null);
+            nextFrame(check.switchData ? check.switchData.nextFrame.uid : null);
 
         setDragCurrentPicture(null);
         mouse.isDragCorrect = false;
@@ -320,7 +320,7 @@ const Canvas = ({
 
         const check = chDrag(
             {
-                actionId: 'Drag',
+                actionId: 13,
                 x: mousePos.x,
                 y: mousePos.y,
                 isStarted: mouse.isDragStart,
@@ -333,7 +333,7 @@ const Canvas = ({
 
         mouse.isDragStart = false;
 
-        if (!check || check.switchData!.actionType !== 'Drag') {
+        if (!check || check.switchData!.actionType !== 13) {
             if (mouse.isDragCorrect)
                 mistakeCount();
             mouse.isDragCorrect = false;
@@ -373,9 +373,9 @@ const Canvas = ({
 
     const mouseWheelHandler = (e:React.WheelEvent<HTMLElement>, canvas:HTMLCanvasElement) => {
         const suitableSwitchData = selectedFrame.actions.find(data => {
-            if (data.actionType !== 'ScrollUp' && data.actionType !== 'ScrollDown')
+            if (data.actionType !== 14 && data.actionType !== 15)
                 return false;
-            const actionId = e.deltaY < 0 ? 'ScrollUp' : 'ScrollDown';
+            const actionId = e.deltaY < 0 ? 14 : 15;
             if (actionId !== data.actionType)
                 return false;
             const coords = getMouseCoords(e, canvas, canvasZoom);
@@ -384,7 +384,7 @@ const Canvas = ({
         });
 
         if (suitableSwitchData)
-            return nextFrame(suitableSwitchData.nextFrameId);
+            return nextFrame(suitableSwitchData.nextFrame.uid);
 
         mistakeCount();
     };

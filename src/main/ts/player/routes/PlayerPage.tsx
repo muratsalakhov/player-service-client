@@ -88,7 +88,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
         // setLoading(true);
         const bufferingNextFrames = (frame:IFrame, previousImage:HTMLImageElement | undefined) => {
             console.log("bufferingNextFrames");
-            const nextFrameIds = frame.actions.map(sw => sw.nextFrameId);
+            const nextFrameIds = frame.actions.map(sw => sw.nextFrame.uid);
             nextFrameIds.forEach(nextFrameId => {
                 console.log("bufferingNextFrames-foreach");
                 if (nextFrameId && frames[nextFrameId] && !frames[nextFrameId].pictureData)
@@ -112,7 +112,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
 
                         // get pictures
                         frame.actions.forEach(data => {
-                            if (data.actionType !== 'Drag')
+                            if (data.actionType !== 13)
                                 return;
 
                             switchDataPromises = [...switchDataPromises,
@@ -175,15 +175,15 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
             const suitableSwitchData = selectedFrame.actions.find(data => {
                 console.log("suitableSwitchData");
                 console.log(data);
-                if (data.actionType === 'KeyboardClick')
+                if (data.actionType === 9)
                     return key === data.key && !modKey;
-                if (data.actionType === 'KeyboardModClick')
+                if (data.actionType === 12)
                     return key === data.key && modKey === data.modKey;
                 return false;
             });
 
             if (suitableSwitchData)
-                return nextFrame(suitableSwitchData.nextFrameId);
+                return nextFrame(suitableSwitchData.nextFrame.uid);
 
             mistakeCount();
         };

@@ -80,7 +80,7 @@ export default (
                         switchData: state.frames[action.frameId].actions.map(data => {
                             if (data.uid !== action.switchDataId)
                                 return data;
-                            if (data.actionType !== 'Drag')
+                            if (data.actionType !== 13)
                                 return data;
                             return {
                                 ...data,
