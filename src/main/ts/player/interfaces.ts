@@ -181,7 +181,7 @@ export type IEvent<K, V = void> = V extends void ? { actionId: K } : { actionId:
 //     | IEvent<15, { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
 //     | IEvent<17, { duration: number }>
 
-export interface ISwitchEvent {
+/*export interface ISwitchEvent {
     uid: string
     actionType: number
     nextFrame: IFrameId
@@ -190,10 +190,10 @@ export interface ISwitchEvent {
     modKey?:number
     pictures: Array<ISwitchPicture>
     ticksCount: number
-    xendLeft: number
-    xendRight: number
     xLeft: number
     xRight: number
+    yLeft: number
+    yRight: number
     startXLeft: number
     startYLeft: number
     startXRight: number
@@ -202,7 +202,7 @@ export interface ISwitchEvent {
     finishYLeft: number
     finishXRight: number
     finishYRight: number
-}
+}*/
 
 export type IEventForCheck =
     | IEvent<1, { x: number, y: number }>
