@@ -1,6 +1,5 @@
 import {
     ICheckDragResult,
-    ISwitchEvent,
     IEventForCheck,
     ISquareCoords,
     ISwitchData

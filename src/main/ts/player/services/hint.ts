@@ -1,4 +1,4 @@
-import {ISquareCoords, ISwitchData, ISwitchEvent} from "../interfaces";
+import {ISquareCoords, ISwitchData} from "../interfaces";
 
 const color = [247, 224, 29, 240]; // rgba
 const fillStyle = `rgb(${color.join(', ')})`;

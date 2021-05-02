@@ -92,7 +92,9 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
             nextFrameIds.forEach(nextFrameId => {
                 console.log("bufferingNextFrames-foreach");
                 if (nextFrameId && frames[nextFrameId] && !frames[nextFrameId].pictureData)
-                    bufferingFrame(frames[nextFrameId], previousImage);
+                    console.log("FRAME");
+                    console.log(frame)
+                    bufferingFrame(frames[nextFrameId], frame.pictureData);
             });
         };
 
@@ -107,6 +109,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
                     .then(imageData => {
                         console.log("getImageData");
                         setPictureData(frame.uid, imageData);
+                        //frame.pictureData = imageData;
 
                         let switchDataPromises: Array<Promise<void>> = [];
 
@@ -132,7 +135,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
 
                         Promise.all(switchDataPromises).then(() => {
                             resolve();
-                            bufferingNextFrames(frame, previousImage);
+                            bufferingNextFrames(frame, frame.pictureData);
                         })
                     });
             });
