@@ -59,6 +59,7 @@ export default (
             return {...state, selectedFrameId: action.frameId, mistakeCounter: 0};
 
         case 'SET_PICTURE_DATA':
+
             return {
                 ...state,
                 frames: {

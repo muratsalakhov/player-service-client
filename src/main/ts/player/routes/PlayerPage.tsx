@@ -91,7 +91,7 @@ const PlayerPage = ({ frames, selectedScript, selectedFrame, selectedFrameId,
 
             console.log("bufferingFrame");
             new Promise<void>(resolve => {
-                if (frame.pictureData)
+                if (frame.pictureData && frame)
                     return resolve();
 
                 getImageData(frame.pictureLink, previousImage)
@@ -126,7 +126,7 @@ const PlayerPage = ({ frames, selectedScript, selectedFrame, selectedFrameId,
                             resolve();
                             console.log("before buffering");
                             console.log(frame);
-                            bufferingNextFrames(frame, frame.pictureData);
+                            bufferingNextFrames(frame, imageData);
                         })
                     });
             });
