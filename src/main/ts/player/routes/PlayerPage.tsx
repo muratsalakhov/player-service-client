@@ -1,14 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import { useHistory } from "react-router-dom";
 import '../../../css/player/app.css';
-import {IFrame, IState, ISwitchData} from "../interfaces";
+import {IFrame, IState} from "../interfaces";
 import { connect, ConnectedProps } from "react-redux";
 import Canvas from "../components/Canvas";
 import getImageData from "../utils/getImageData";
 import {
     MISTAKE_COUNT,
     NEXT_FRAME,
-    //SELECT_CHAPTER,
     SELECT_FRAME,
     SET_DRAG_PICTURE_DATA,
     SET_PICTURE_DATA
@@ -28,20 +27,11 @@ const mapState = (state:IState) => {
     const r = state.scriptsReducer;
     const selectedScript = r.selectedScriptId ? r.scripts[r.selectedScriptId] : null;
     const selectedFrame:IFrame | null = r.selectedFrameId ? r.frames[r.selectedFrameId] : null;
-    /*const selectedChapterIndex = selectedScript
-        ? selectedScript.chapters.findIndex(id => id === r.selectedChapterId)
-        : null;*/
-    /*const nextChapterId = (selectedScript && selectedChapterIndex !== null)
-        ? selectedScript.chapters[selectedChapterIndex + 1]
-        : null;
-    const nextChapter = nextChapterId ? r.chapters[nextChapterId] : null;*/
     return {
         frames: state.scriptsReducer.frames,
         selectedScript,
-        //selectedChapterId: r.selectedChapterId,
         selectedFrame,
         selectedFrameId: selectedFrame?.uid,
-        //nextChapter,
     }
 };
 
@@ -50,7 +40,6 @@ const mapDispatch = {
     setDragPictureData: SET_DRAG_PICTURE_DATA,
     nextFrame: NEXT_FRAME,
     mistakeCount: MISTAKE_COUNT,
-    //selectChapter: SELECT_CHAPTER,
     selectFrame: SELECT_FRAME
 };
 
@@ -58,8 +47,8 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ClassicProps;
 
-const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFrame, selectedFrameId, /*nextChapter,*/
-    setPictureData, setDragPictureData, nextFrame, mistakeCount, /*selectChapter,*/ selectFrame}: Props) => {
+const PlayerPage = ({ frames, selectedScript, selectedFrame, selectedFrameId,
+    setPictureData, setDragPictureData, nextFrame, mistakeCount, selectFrame}: Props) => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
 
@@ -94,7 +83,7 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
                 if (nextFrameId && frames[nextFrameId] && !frames[nextFrameId].pictureData)
                     console.log("FRAME");
                     console.log(frame)
-                    bufferingFrame(frames[nextFrameId], frame.pictureData);
+                    bufferingFrame(frames[nextFrameId], previousImage);
             });
         };
 
@@ -135,6 +124,8 @@ const PlayerPage = ({ frames, selectedScript, /*selectedChapterId,*/ selectedFra
 
                         Promise.all(switchDataPromises).then(() => {
                             resolve();
+                            console.log("before buffering");
+                            console.log(frame);
                             bufferingNextFrames(frame, frame.pictureData);
                         })
                     });
