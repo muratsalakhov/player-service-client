@@ -14,6 +14,28 @@ import {Button, CircularProgress} from "@material-ui/core";
 import {getScripts} from "../services/requests";
 import ScriptButton from "../components/ScriptButton";
 import Alert from '@material-ui/lab/Alert';
+import Echo from 'laravel-echo';
+
+/*
+declare global {
+    interface Window {
+        Pusher: any;
+        Echo: any;
+    }
+}
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'a1s2d3f4',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss']
+});
+*/
 
 type ClassicProps = {
 
