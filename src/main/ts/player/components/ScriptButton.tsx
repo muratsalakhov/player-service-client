@@ -60,7 +60,7 @@ const ScriptButton = ({ scriptId, index, scripts, /*chapters,*/ frames,
                 const frames:IFrames = {};
                 response.frames.forEach(frame => frames[frame.uid] = {
                     ...frame,
-                    pictureLink: '/data/' + frame.pictureLink
+                    pictureLink: '/data/' + scriptId + '/' + frame.pictureLink
                 });
                 setFrames(frames);
                 selectFrame(response.frames[0].uid);
