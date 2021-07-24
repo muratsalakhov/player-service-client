@@ -26,21 +26,24 @@ export const statistics: {
     script: {
         timeStart: number,
         timeFinish: number,
+        totalTime: number,
         mistakes: number
-    }/*,
-    chapters: {
+    },
+    frames: {
         [key: string]: {
             id: string,
             timeStart: number,
             timeFinish: number,
+            totalTime: number,
             mistakes: number
         }
-    }*/
+    }
 }= {
     script:{
         timeStart: 0,
         timeFinish: 0,
+        totalTime: 0,
         mistakes: 0
-    }/*,
-    chapters: {}*/
+    },
+    frames: {}
 };

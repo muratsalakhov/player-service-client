@@ -10,9 +10,13 @@ module.exports = {
             }
         ]
     },
-    output: {
+    /*output: {
         filename: "js/bundle.js",
         path: path.join(__dirname, "target", "classes", "static")
+    },*/
+    output: {
+        filename: "js/app.js",
+        path: "/home/muratsalakhov/PhpstormProjects/player-service/player-api/public/"
     },
     resolve: {
         extensions: [".js", ".ts", ".tsx", ".jsx"]

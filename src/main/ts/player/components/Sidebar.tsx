@@ -10,7 +10,7 @@ const mapState = (state:IState) => {
     const r = state.scriptsReducer;
     const selectedFrame:IFrame | null = r.selectedFrameId ? r.frames[r.selectedFrameId] : null;
     return {
-        selectedFrameId: selectedFrame?.frameId,
+        selectedFrameId: selectedFrame?.uid,
         hintText: selectedFrame?.hintText,
         mistakeCounter: state.scriptsReducer.mistakeCounter,
         sidebarAutoHiding: state.settingsReducer.sidebarAutoHiding,
@@ -59,7 +59,7 @@ const Sidebar = ({
             {examMode
                 ? <Timer/>
                 : (mistakeCounter > 2 || showTextHint)
-                    ? hintText?.text
+                    ? hintText
                     : <Button onClick={() => setShowTextHint(true)} variant='contained'
                               style={{background: '#fafafa'}}>
                         Показать  подсказку

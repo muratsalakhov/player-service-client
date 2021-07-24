@@ -13,14 +13,18 @@ export default (pictureLink:string, previousImage:HTMLImageElement | undefined) 
             if (!context) {
                 image.remove();
                 reject();
+                console.log("no context getImage");
                 return;
             }
+            console.log("sum prev image");
+            console.log(previousImage);
             if (!previousImage) {
                 context.drawImage(image, 0, 0);
                 const resultImage = new Image();
                 resultImage.crossOrigin = "anonymous";
                 resultImage.onload = () => resolve(resultImage);
                 resultImage.src = canvas.toDataURL("image/png");
+                console.log("no prev image");
                 return;
             }
             summarizeImages(

@@ -26,8 +26,8 @@ const mapState = (state:IState) => {
         selectedFrame,
         canvasZoom: state.scriptsReducer.canvasZoom,
         pictureData: r.hintPicture || r.dragCurrentPicture || selectedFrame?.pictureData,
-        width: r.selectedChapterId ? r.chapters[r.selectedChapterId].pictureWidth : 0,
-        height: r.selectedChapterId ? r.chapters[r.selectedChapterId].pictureHeight : 0,
+        width: r.selectedScriptId ? r.scripts[r.selectedScriptId].pictureWidth : 0,
+        height: r.selectedScriptId ? r.scripts[r.selectedScriptId].pictureHeight : 0,
         mistakeCounter: r.mistakeCounter,
         examMode: state.settingsReducer.examMode
     }
@@ -111,7 +111,7 @@ const Canvas = ({
             return;
         if (mistakeCounter < 5 || examMode)
             return;
-        showHint(selectedFrame.switchData, canvasRef.current, canvasZoom, setHintPicture, selectedScript.dragDelta);
+        showHint(selectedFrame.actions, canvasRef.current, canvasZoom, setHintPicture, selectedScript.dragDelta);
         window.setTimeout(() => {
             setHintPicture(null);
         }, hintTimeOut);
@@ -141,10 +141,13 @@ const Canvas = ({
 
             // Проверим, есть ли именно такой двойной клик среди верных действий
             const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
-            const nextFrameId:string | null = chClick(
-                {actionId: 'LeftDoubleMouseClick', x, y},
-                selectedFrame.switchData
+            const nextFrameId:string | null | undefined = chClick(
+                {actionId: 4, x, y},
+                selectedFrame.actions
             );
+
+            if (nextFrameId === undefined)
+                return nextFrame(null);
 
             // Если нет, клик не верный
             if (!nextFrameId)
@@ -159,10 +162,12 @@ const Canvas = ({
 
         // Проверим, есть ли именно такой клик среди верных действий
         const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
-        let nextFrameId:string | null = chClick(
-            {actionId: 'LeftMouseClick', x, y},
-            selectedFrame.switchData
+        let nextFrameId:string | null | undefined= chClick(
+            {actionId: 1, x, y},
+            selectedFrame.actions
         );
+        if (nextFrameId === undefined)
+            return nextFrame(null);
 
         // Если есть, следующий кадр
         if (nextFrameId)
@@ -170,8 +175,8 @@ const Canvas = ({
 
         // Если нет, проверим, есть ли именно такой двойной клик среди верных действий
         nextFrameId = chClick(
-            {actionId: 'LeftDoubleMouseClick', x, y},
-            selectedFrame.switchData
+            {actionId: 4, x, y},
+            selectedFrame.actions
         );
 
         // Если нет, клик не верный
@@ -201,8 +206,8 @@ const Canvas = ({
         // Проверим, есть ли именно такой правый клик среди верных действий
         const {x, y}:IPointCoords = getMouseCoords(e, canvas, canvasZoom);
         const nextFrameId:string | null = chClick(
-            {actionId: 'RightMouseClick', x, y},
-            selectedFrame.switchData
+            {actionId: 5, x, y},
+            selectedFrame.actions
         );
 
         // Если нет, клик не верный
@@ -245,8 +250,8 @@ const Canvas = ({
 
         if (mouse.clickNotMove) {
             const nextFrameId = chClick(
-                {actionId: 'LeftMouseClick', x, y},
-                selectedFrame.switchData
+                {actionId: 1, x, y},
+                selectedFrame.actions
             );
 
             if (!nextFrameId)
@@ -257,14 +262,14 @@ const Canvas = ({
 
         const check = chDrag(
             {
-                actionId: 'Drag',
+                actionId: 13,
                 x, y,
                 isStarted: false,
                 isFinished: true,
                 dragDelta: selectedScript.dragDelta,
                 setWasDragInStartArea: () => mouse.wasDragInStartArea = true
             },
-            selectedFrame.switchData
+            selectedFrame.actions
         );
 
         if (!check)
@@ -285,7 +290,7 @@ const Canvas = ({
         }
 
         if (mouse.wasDragInStartArea)
-            nextFrame(check.switchData ? check.switchData.nextFrameId : null);
+            nextFrame(check.switchData ? check.switchData.nextFrame.uid : null);
 
         setDragCurrentPicture(null);
         mouse.isDragCorrect = false;
@@ -315,7 +320,7 @@ const Canvas = ({
 
         const check = chDrag(
             {
-                actionId: 'Drag',
+                actionId: 13,
                 x: mousePos.x,
                 y: mousePos.y,
                 isStarted: mouse.isDragStart,
@@ -323,12 +328,12 @@ const Canvas = ({
                 dragDelta: selectedScript.dragDelta,
                 setWasDragInStartArea: () => mouse.wasDragInStartArea = true
             },
-            selectedFrame.switchData
+            selectedFrame.actions
         );
 
         mouse.isDragStart = false;
 
-        if (!check || check.switchData!.switchEvent.actionId !== 'Drag') {
+        if (!check || check.switchData!.actionType !== 13) {
             if (mouse.isDragCorrect)
                 mistakeCount();
             mouse.isDragCorrect = false;
@@ -344,7 +349,7 @@ const Canvas = ({
         }
 
         if (check.checkDragResult!.tunnelCheckResult && mouse.wasDragInStartArea) {
-            setDragCurrentPicture(check.switchData!.switchEvent.pictures[
+            setDragCurrentPicture(check.switchData!.pictures[
             check.checkDragResult!.areaNumber - 1
                 ].pictureData || null);
             return;
@@ -367,19 +372,19 @@ const Canvas = ({
     };
 
     const mouseWheelHandler = (e:React.WheelEvent<HTMLElement>, canvas:HTMLCanvasElement) => {
-        const suitableSwitchData = selectedFrame.switchData.find(data => {
-            if (data.switchEvent.actionId !== 'ScrollUp' && data.switchEvent.actionId !== 'ScrollDown')
+        const suitableSwitchData = selectedFrame.actions.find(data => {
+            if (data.actionType !== 14 && data.actionType !== 15)
                 return false;
-            const actionId = e.deltaY < 0 ? 'ScrollUp' : 'ScrollDown';
-            if (actionId !== data.switchEvent.actionId)
+            const actionId = e.deltaY < 0 ? 14 : 15;
+            if (actionId !== data.actionType)
                 return false;
             const coords = getMouseCoords(e, canvas, canvasZoom);
-            return coords.x >= data.switchEvent.xleft && coords.x <= data.switchEvent.xright &&
-                coords.y >= data.switchEvent.yleft && coords.y <= data.switchEvent.yright;
+            return coords.x >= data.xLeft && coords.x <= data.xRight &&
+                coords.y >= data.yLeft && coords.y <= data.yRight;
         });
 
         if (suitableSwitchData)
-            return nextFrame(suitableSwitchData.nextFrameId);
+            return nextFrame(suitableSwitchData.nextFrame.uid);
 
         mistakeCount();
     };

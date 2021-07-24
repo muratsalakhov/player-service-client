@@ -1,4 +1,4 @@
-import {IScripts, IChapters, IFrames} from "../interfaces";
+import {IScripts, IFrames} from "../interfaces";
 
 export const SET_SCRIPTS = (scripts: IScripts) => {
     return {
@@ -7,12 +7,12 @@ export const SET_SCRIPTS = (scripts: IScripts) => {
     }
 };
 
-export const SET_CHAPTERS = (chapters: IChapters) => {
+/*export const SET_CHAPTERS = (chapters: IChapters) => {
     return {
         type: 'SET_CHAPTERS',
         chapters
     }
-};
+};*/
 
 export const SET_FRAMES = (frames: IFrames) => {
     return {
@@ -28,12 +28,12 @@ export const SELECT_SCRIPT = (id: string | null) => {
     }
 };
 
-export const SELECT_CHAPTER = (chapterId: string | null) => {
+/*export const SELECT_CHAPTER = (chapterId: string | null) => {
     return {
         type: 'SELECT_CHAPTER',
         chapterId
     }
-};
+};*/
 
 export const SELECT_FRAME = (frameId: string | null) => {
     return {

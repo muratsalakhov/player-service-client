@@ -10,10 +10,10 @@ type ClassicProps = {};
 
 const mapState = (state:IState) => {return {
     scripts: state.scriptsReducer.scripts,
-    chapters: state.scriptsReducer.chapters,
+    //chapters: state.scriptsReducer.chapters,
     frames: state.scriptsReducer.frames,
     selectedScript: state.scriptsReducer.selectedScriptId,
-    selectedChapter: state.scriptsReducer.selectedChapterId,
+    //selectedChapter: state.scriptsReducer.selectedChapterId,
     selectedFrame: state.scriptsReducer.selectedFrameId,
 }};
 
@@ -23,14 +23,14 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ClassicProps;
 
-const ChangeChapterPage = ({ scripts, chapters, frames,
-    selectedScript, selectedChapter, selectedFrame}:Props) => {
+const ChangeChapterPage = ({ scripts, /*chapters,*/ frames,
+    selectedScript, /*selectedChapter,*/ selectedFrame}:Props) => {
     let history = useHistory();
     const [progress, setProgress] = React.useState(0);
     const _isMounted = useRef(true);
 
     const startProgressUpdater = useCallback(() => {
-        const timeToRead = selectedChapter ? (chapters[selectedChapter].name.length * 70 / 10) : 0;
+        const timeToRead = selectedScript ? (scripts[selectedScript].name.length * 70 / 10) : 0;
         timers.changeChapter = window.setInterval(() => {
             setProgress(oldProgress => {
                 if (!_isMounted.current || oldProgress > 100) {
@@ -45,7 +45,7 @@ const ChangeChapterPage = ({ scripts, chapters, frames,
             clearInterval(timers.changeChapter);
             setProgress(0);
         }
-    }, [chapters, selectedChapter]);
+    }, [scripts, selectedScript]);
 
     useEffect(startProgressUpdater, []);
 
@@ -57,10 +57,8 @@ const ChangeChapterPage = ({ scripts, chapters, frames,
     useEffect(goToPlayer, [progress]);
 
     if (!selectedScript ||
-        !selectedChapter ||
         !selectedFrame ||
         !scripts[selectedScript] ||
-        !chapters[selectedChapter] ||
         !frames[selectedFrame]) {
         history.push('/');
         return <></>;
@@ -69,7 +67,7 @@ const ChangeChapterPage = ({ scripts, chapters, frames,
     return <div className="App" onContextMenu={e => e.preventDefault()}>
         <header className="App-header">
             <div style={{margin: '1em'}}>
-                {'Выбран раздел '}<b>"{chapters[selectedChapter].name}"</b>
+                {'Выбран сценарий '}<b>"{scripts[selectedScript].name}"</b>
 
                 <br/><br/>
 

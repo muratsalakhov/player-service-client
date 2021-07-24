@@ -3,11 +3,14 @@ export default (
     imageFront:HTMLImageElement,
     onImageReady:(image:HTMLImageElement) => any
 ) => {
+    console.log("summarize image");
+    console.log(imageBack);
+    console.log(imageFront);
     const canvas = document.createElement('canvas');
     canvas.width = imageFront.naturalWidth;
     canvas.height = imageFront.naturalHeight;
     const context = canvas.getContext('2d');
-    
+
     if (!context) {
         console.error('no context');
         return imageFront;

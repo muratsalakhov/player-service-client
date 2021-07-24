@@ -1,10 +1,10 @@
 import React, {useEffect, useState, useRef, useCallback} from 'react';
 import '../../../css/player/app.css';
 import {
-    SELECT_CHAPTER,
+    //SELECT_CHAPTER,
     SELECT_FRAME,
     SELECT_SCRIPT,
-    SET_CHAPTERS,
+    //SET_CHAPTERS,
     SET_FRAMES,
     SET_SCRIPTS
 } from "../actions/scriptActions";
@@ -14,6 +14,28 @@ import {Button, CircularProgress} from "@material-ui/core";
 import {getScripts} from "../services/requests";
 import ScriptButton from "../components/ScriptButton";
 import Alert from '@material-ui/lab/Alert';
+import Echo from 'laravel-echo';
+
+/*
+declare global {
+    interface Window {
+        Pusher: any;
+        Echo: any;
+    }
+}
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'a1s2d3f4',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss']
+});
+*/
 
 type ClassicProps = {
 
@@ -25,10 +47,10 @@ const mapState = (state:IState) => {return {
 
 const mapDispatch = {
     setScripts: SET_SCRIPTS,
-    setChapters: SET_CHAPTERS,
+    //setChapters: SET_CHAPTERS,
     setFrames: SET_FRAMES,
     selectScript: SELECT_SCRIPT,
-    selectChapter: SELECT_CHAPTER,
+    //selectChapter: SELECT_CHAPTER,
     selectFrame: SELECT_FRAME
 };
 
@@ -36,26 +58,25 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ClassicProps;
 
-const IndexPage = ({ scripts, setScripts, setChapters, setFrames, selectScript, selectChapter, selectFrame}:Props) => {
+const IndexPage = ({ scripts, setScripts, setFrames, selectScript, selectFrame}:Props) => {
     const [loading, setLoading] = useState(true);
     const _isMounted = useRef(true);
 
     const scriptsLoader = useCallback(() => {
         selectScript(null);
-        selectChapter(null);
         selectFrame(null);
         getScripts()
             .then((response: Array<IScript>) => {
                 if (!_isMounted.current)
                     return;
                 const scripts:IScripts = {};
-                response.filter(script => script.isActive).forEach(script => scripts[script.id] = script);
+                response.forEach(script => scripts[script.uid] = script);
                 setScripts(scripts);
                 setLoading(false)
             })
             .catch(() => alert('Не удалось загрузить список доступных сценариев'));
         return () => {_isMounted.current = false}
-    }, [selectScript, setScripts, setChapters, setFrames]);
+    }, [selectScript, setScripts, setFrames]);
 
     useEffect(scriptsLoader, []);
 

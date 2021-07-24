@@ -45,7 +45,7 @@ export interface IScript {
     dragDelta: number
     dragTimeFactor: number
     scrollMoveFactor: number
-    firstFrame: string
+    firstFrame: IFrameId
     pictureWidth: number
     pictureHeight: number
     frames: Array<IFrame>
@@ -57,7 +57,7 @@ export interface IScriptWithFullFrames {
     dragDelta: number
     dragTimeFactor: number
     scrollMoveFactor: number
-    firstFrame: string
+    firstFrame: IFrameId
     pictureWidth: number
     pictureHeight: number
     frames: Array<IFrame>
@@ -93,6 +93,10 @@ export interface IFrame {
     taskText: string
     hintText: string
     actions: Array<ISwitchData>
+}
+
+export interface IFrameId {
+    uid: string
 }
 
 /*export interface IFrame {
@@ -177,19 +181,19 @@ export type IEvent<K, V = void> = V extends void ? { actionId: K } : { actionId:
 //     | IEvent<15, { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
 //     | IEvent<17, { duration: number }>
 
-export interface ISwitchEvent {
+/*export interface ISwitchEvent {
     uid: string
-    actionType: string
-    nextFrame: string
+    actionType: number
+    nextFrame: IFrameId
     duration: number
     key: number
     modKey?:number
     pictures: Array<ISwitchPicture>
     ticksCount: number
-    xendLeft: number
-    xendRight: number
     xLeft: number
     xRight: number
+    yLeft: number
+    yRight: number
     startXLeft: number
     startYLeft: number
     startXRight: number
@@ -198,13 +202,13 @@ export interface ISwitchEvent {
     finishYLeft: number
     finishXRight: number
     finishYRight: number
-}
+}*/
 
 export type IEventForCheck =
-    | IEvent<'LeftMouseClick', { x: number, y: number }>
-    | IEvent<'LeftDoubleMouseClick', { x: number, y: number }>
-    | IEvent<'RightMouseClick', { x: number, y: number }>
-    | IEvent<'Drag', {
+    | IEvent<1, { x: number, y: number }>
+    | IEvent<4, { x: number, y: number }>
+    | IEvent<5, { x: number, y: number }>
+    | IEvent<13, {
         x: number,
         y: number,
         isStarted: boolean,
@@ -212,16 +216,16 @@ export type IEventForCheck =
         dragDelta: number,
         setWasDragInStartArea: () => void
     }>
-    | IEvent<'KeyboardClick', { key: number }>
-    | IEvent<'KeyboardModClick', { key: number, modKey: number }>
-    | IEvent<'ScrollUp', { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
-    | IEvent<'ScrollDown', { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
-    | IEvent<'Pause', { duration: number }>
+    | IEvent<9, { key: number }>
+    | IEvent<12, { key: number, modKey: number }>
+    | IEvent<14, { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
+    | IEvent<15, { xleft: number, xright: number, yleft: number, yright: number }>//todo: pictures for scroll
+    | IEvent<17, { duration: number }>
 
 export interface ISwitchData {
     uid: string
-    actionType: string
-    nextFrameId: string | null
+    actionType: number
+    nextFrame: IFrameId | null
     duration: number
     key: number
     modKey?:number

@@ -6,11 +6,13 @@ import { connect, ConnectedProps } from "react-redux";
 import {statistics} from "../globals";
 import timeConversion from "../utils/timeConversion";
 import {Button} from "@material-ui/core";
+import {sendStatistic} from "../services/requests";
 
 const mapState = (state:IState) => {
     return {
         scripts: state.scriptsReducer.scripts,
-        chapters: state.scriptsReducer.chapters
+        selectedScriptId: state.scriptsReducer.selectedScriptId
+        //chapters: state.scriptsReducer.chapters
     }
 };
 
@@ -26,23 +28,30 @@ type Props = PropsFromRedux & {
 
 const ResultPage = (props:Props) => {
     const history = useHistory();
+    statistics.script.totalTime = statistics.script.timeFinish - statistics.script.timeStart;
+
+    {Object.keys(statistics.frames).map(frameId => {
+        statistics.frames[frameId].totalTime = statistics.frames[frameId].timeFinish - statistics.frames[frameId].timeStart;
+    })}
+
+    sendStatistic(props.selectedScriptId, statistics);
+
+    console.log("STATS",statistics);
+
     return <div className="App" onContextMenu={e => e.preventDefault()}>
         <header className="App-header">
             <h1>Результаты прохождения обучающей программы:</h1>
             <br/><br/>
             <div style={{textAlign: 'left'}}>
-                {Object.keys(statistics.chapters).map(chapterId => {
-                    const time = statistics.chapters[chapterId].timeFinish - statistics.chapters[chapterId].timeStart;
-                    return <div style={{marginBottom: '1em'}}>
-                        <span style={{textDecoration: 'underline'}}>Раздел "{props.chapters[chapterId].name}":</span>
-                        <div style={{paddingLeft: '1em'}}>
-                            Время: <b>{timeConversion(time)}</b>
-                        </div>
-                        <div style={{paddingLeft: '1em'}}>
-                            Ошибок: <b>{statistics.chapters[chapterId].mistakes}</b>
-                        </div>
+                <div style={{marginBottom: '1em'}}>
+                    <span style={{textDecoration: 'underline'}}>Сценарий "{props.scripts[props.selectedScriptId].name}":</span>
+                    <div style={{paddingLeft: '1em'}}>
+                        Время: <b>{timeConversion(statistics.script.totalTime)}</b>
                     </div>
-                })}
+                    <div style={{paddingLeft: '1em'}}>
+                        Ошибок: <b>{statistics.script.mistakes}</b>
+                    </div>
+                </div>
             </div>
             <br/><br/>
             <Button onClick={() => history.push('/')} variant='contained'>

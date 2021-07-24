@@ -5,9 +5,7 @@ import {connect, ConnectedProps} from "react-redux";
 interface ClassicProps {}
 
 const mapState = (state:IState) => {
-    const voiceTaskLink = state.scriptsReducer.selectedFrameId
-        ? state.scriptsReducer.frames[state.scriptsReducer.selectedFrameId].taskVoice?.link
-        : undefined;
+    const voiceTaskLink = undefined;
     return {
         selectedFrameId: state.scriptsReducer.selectedFrameId,
         voiceTaskEnable: state.settingsReducer.voiceTaskEnable,
